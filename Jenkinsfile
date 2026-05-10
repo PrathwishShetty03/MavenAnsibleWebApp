@@ -1,53 +1,66 @@
-pipeline {
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    agent any
+    <modelVersion>4.0.0</modelVersion>
 
-    environment {
-        LANG = 'en_US.UTF-8'
-        LC_ALL = 'en_US.UTF-8'
-    }
+    <groupId>com.example</groupId>
+    <artifactId>MavenAnsibleWebApp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
-    // Fix UTF-8 encoding issues
+    <name>MavenAnsibleWebApp Maven Webapp</name>
+    <url>http://maven.apache.org</url>
 
-    tools {
-        maven 'Maven'
-    }
+    <dependencies>
 
-    stages {
+        <!-- JUnit Dependency -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
 
-        stage('Checkout') {
-            steps {
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 
-                git branch: 'master',
-                    url: 'https://github.com/PrathwishShetty03/MavenAnsibleWebApp.git'
+    </dependencies>
 
-            }
-        }
+    <build>
 
-        stage('Build') {
-            steps {
+        <finalName>MavenAnsibleWebApp</finalName>
 
-                sh 'mvn clean package'
+        <plugins>
 
-            }
-        }
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
 
-        stage('Archive') {
-            steps {
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
 
-                archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+            </plugin>
 
-            }
-        }
+            <!-- Maven WAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
 
-        stage('Deploy') {
-            steps {
+        </plugins>
 
-                sh 'ansible-playbook ansible/playbook.yml -i ansible/hosts.ini'
+    </build>
 
-            }
-        }
-
-    }
-
-}
+</project>
