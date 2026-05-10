@@ -8,14 +8,14 @@
     <groupId>com.example</groupId>
     <artifactId>MavenAnsibleWebApp</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <packaging>war</packaging>
 
-    <name>MavenAnsibleWebApp Maven Webapp</name>
-    <url>http://maven.apache.org</url>
+    <name>MavenAnsibleWebApp</name>
 
     <dependencies>
 
-        <!-- JUnit Dependency -->
+        <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -39,7 +39,7 @@
 
         <plugins>
 
-            <!-- Maven Compiler Plugin -->
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -52,7 +52,7 @@
 
             </plugin>
 
-            <!-- Maven WAR Plugin -->
+            <!-- WAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
