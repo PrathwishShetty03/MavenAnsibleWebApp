@@ -1,66 +1,40 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+pipeline {
+    agent any  // Use any available agent
+    
+    environment {
+        LANG = 'en_US.UTF-8'
+        LC_ALL = 'en_US.UTF-8'
+    }   // this has to be added only if you get an error saying UTF required is 8 but showing in ISO00009
 
-    <modelVersion>4.0.0</modelVersion>
+    tools {
+        maven 'Maven'  // Ensure this matches the name configured in Jenkins
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Veeresh-gaddi/MavenAnsibleWebApp1.git'
+            }
+        }
 
-    <groupId>com.example</groupId>
-    <artifactId>MavenAnsibleWebApp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'  // Run Maven build
+            }
+        }
 
-    <packaging>war</packaging>
+     stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.war', fingerprint:true
+            }
+        }
+        stage('Deploy') {
+            steps {
+               sh 'mvn clean package'  
+               sh 'ansible-playbook ansible/playbook.yml -i ansible/hosts.ini'
+            }
+        }
 
-    <name>MavenAnsibleWebApp</name>
+                  
+    }
 
-    <dependencies>
-
-        <!-- JUnit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Servlet API -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-
-        <finalName>MavenAnsibleWebApp</finalName>
-
-        <plugins>
-
-            <!-- Compiler Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-
-            </plugin>
-
-            <!-- WAR Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
-            </plugin>
-
-        </plugins>
-
-    </build>
-
-</project>
+   }
